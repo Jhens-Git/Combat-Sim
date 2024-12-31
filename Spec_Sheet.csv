@@ -1,5 +1,4 @@
-Tier,ID,Name,Origin,Manuverability,Stealth,Electronic Warfare,Health
-SS,Purdue,Boilermaker,USA,1,1,1,100
+Tier,Name,Nickname,Origin,Maneuverability,Stealth,Electronic Warfare,Health
 S,F22,Raptor,USA,0.95,0.95,0.9,80
 S,F35,Lightning II,USA,0.8,0.9,0.95,70
 S,Su57,Felon,Russia,0.95,0.7,0.8,80
@@ -16,4 +15,4 @@ C,Su27,Flanker,Russia,0.9,0.3,0.5,80
 C,Mirage,Mirage 2000,France,0.7,0.3,0.5,60
 C,MiG29,Fulcrum,Russia,0.8,0.3,0.5,70
 C,F14,Tomcat,USA,0.7,0.4,0.5,60
-F,F69420,IU Shitbox,USA,0.1,0.1,0.1,10
+F,FU,Shitbox,USA,0.1,0.1,0.1,10
