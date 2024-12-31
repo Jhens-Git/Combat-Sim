@@ -5,7 +5,7 @@
 
 import csv
 
-def getTeam(teamName):
+def selectTeam(teamName):
     
     # Initialize the team size and team array
     teamSize = 0
@@ -57,7 +57,7 @@ def select_aircraft(teamName):
         aircraft_id = input(f"Enter the aircraft ID for team {teamName} (Example 'F22'): ")
         
         # Validate the aircraft ID
-        with open('Spec_Sheet.csv', mode = 'r') as file:
+        with open('SpecSheet.csv', mode = 'r') as file:
             csv_reader = csv.reader(file)
             next(csv_reader)  # Skip header
             valid_ids = [row[1] for row in csv_reader]
@@ -75,7 +75,7 @@ def select_qty(teamName, teamSize, aircraft_id):
     # If the input is invalid, prompt the user to enter the quantity again
     while True:
         # Prompt user to enter the number of aircrafts
-        aircraft_qty = input(f"Enter the number of {aircraft_id} for team {teamName} (Note, we only allow up to 10 in a team): ")
+        aircraft_qty = input(f"Enter the number of {aircraft_id} for team {teamName} (Note, up to 10 allowed per team): ")
         
         # Validate the aircraft quantity
         if not aircraft_qty.isdigit():
