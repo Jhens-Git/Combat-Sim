@@ -1,78 +1,94 @@
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 # Jamie Henson
-# Run simulations of the senario
+# Run simulations logic of the flight combat senario
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-import csv
 import random
-import numpy as np
 
-def runSimulation(TeamA, TeamB, TeamA_specs, TeamB_specs):
+def runSimulation(TeamA, TeamB):
+    # Initialize combat distance in nautical miles
+    distance = 50
     
-    # Initialize the team scores and desired number of simulations runs
-    TeamA_win = 0
-    TeamB_win = 0
-    runs = 20
+    # Initialize list of aircraft detected
+    detected_TeamA = []
+    detected_TeamB = []
     
-    # Run the simulation the desired number of times 
-    for run in range(runs):
+    # Initialize list of aircraft undetected (All aircrafts will start off undetected)
+    undetected_TeamA = []
+    undetected_TeamB = []
+    for aircraft in TeamA:
+        undetected_TeamA.append(aircraft)
+    for aircraft in TeamA:
+        undetected_TeamB.append(aircraft)
+    
+    # Run BVR (Beyond Visual Range) until combat distance is within 10 nautical miles
+    while distance > 10:
+        # Print the events that occur at the given combat range
+        print(f"\nAt a range of {distance} nautical miles:")
         
-        # Run BVR simulation
-        TeamA, TeamB = BVR(TeamA, TeamA_specs, TeamB, TeamB_specs)
+        # Detection Phase (Get detect aircrafts in each team given combat distance)
+
         
-        # Continue dog fight until no aircrafts are left in one of the teams
-        while True:
-            
-            
-            
-            
-            
-            # Run WVR simulation
-            
-            
-            # Combat simulation
-            if all(x == 0 for x in TeamA):
-                TeamB_win += 1
-                break
-            elif all(x == 0 for x in TeamB):
-                TeamA_win += 1
-                break
-            else:
-                continue
-    
-    # Calculate the win percentage of each team
-    result = [TeamA_win/runs, TeamB_win/runs]
-
-    return result, runs
-
-def BVR(TeamA, TeamB):
-    
-    distance = 50 # Initial distance between the two teams [nautical miles]
-    
-    # (Detection phase) Find the aircrafts with lowest stealth value as they will expose the team
-    min_RCS = min(TeamA[:,5])
-    
-    # Keep lowering the distance until one team detects another
-    
-    
-    # Engagement phase
-    
-    
-    # Evasion phase
-    
-    
-    # Merge phase into WVR
-    
-    
-    
-    return TeamA, TeamB
+        
+        
+        # Engagement Phase (Detected aircraft are targeted)
+        
 
 
-def WVR(TeamA, TeamB):
+        
+        # Reveal Mechanics (An undetected aircraft may reveal itself if engaged)
+
+        
+        
+        
+        # Evasion Phase (When an aircraft is targeted, it attempts to evade the missile)
+ 
+        
+        
+
+    
+        
+        
+        # Update distance value
+        distance -= 10
+    
+    
+    # Run BVR (Beyond Visual Range) simulation
+
+    # while each team has an aircraft remaining
+    
+        # Targetting team decides whether to use a 
+
+
+            
+def detection():
+
+    # 
+
+    return 1
+
+def engagement():
+    
     
     
     return 1
     
+def reveal():
+
+
+
+    return 1
+
+def evade():
     
     
     
+    
+    return 1
+
+
+def decide():
+    
+    
+    
+    return 1
