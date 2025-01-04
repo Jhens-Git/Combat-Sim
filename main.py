@@ -22,10 +22,13 @@ def main():
         utils.explain()
     
     # Prompt the user to select the teams for the senario in an array
-    print("\nTeam A\n")
-    TeamA_list = selectTeam('A')
-    print("\nTeam B\n")
-    TeamB_list = selectTeam('B')
+    # print("\nTeam A\n")
+    # TeamA_list = selectTeam('A')
+    TeamA_list = ['F22', 'F35', 'FA18', 'FA18', 'FA18', 'FA18']
+    TeamB_list = ['Su57', 'J20', "Su35", 'Su35', 'Su27', 'Su27']
+    # print("\nTeam B\n")
+    # TeamB_list = selectTeam('B')
+    
     
     # Display the teams selected without their commas and brackets
     print("\nTeam A:", ", ".join(TeamA_list))
@@ -34,9 +37,14 @@ def main():
     # Get the specs of the aircrafts in both teams
     TeamA = getSpecs(TeamA_list)
     TeamB = getSpecs(TeamB_list)
+    print(f"\n {TeamA}")
     
     # Prompt the user to run the simulation
-    result = utils.run(TeamA, TeamB)
+    result = run(TeamA, TeamB)
+    
+    # If the user wants to restart the program, restart it
+    if result:
+        restart()
     
 def run(TeamA, TeamB):
     # Validate user input to run the simulation
