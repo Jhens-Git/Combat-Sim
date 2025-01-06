@@ -1,18 +1,17 @@
-Tier,Name,Nickname,Origin,Maneuverability,Stealth,Electronic Warfare,Health
-S,F22,Raptor,USA,0.95,0.95,0.9,80
-S,F35,Lightning II,USA,0.8,0.9,0.95,70
-S,Su57,Felon,Russia,0.95,0.7,0.8,80
-S,J20,Mighty Dragon,China,0.75,0.9,0.85,80
-A,Rafale,Dassult Rafale,France,0.9,0.65,0.9,80
-A,Typhoon,Eurofighter Typhoon,Europe,0.9,0.55,0.8,80
-A,FA18,Hornet,USA,0.8,0.5,0.7,90
-A,F15,Eagle II,USA,0.75,0.4,0.8,90
-A,Jas39,Gripen E,Sweden,0.8,0.5,0.9,70
-B,Su35,Flanker-E,Russia,0.9,0.4,0.7,90
-B,MiG35,Fulcrum-F,Russia,0.85,0.4,0.5,80
-B,F16,Fighting Falcon,USA,0.8,0.4,0.6,70
-C,Su27,Flanker,Russia,0.9,0.3,0.5,80
-C,Mirage,Mirage 2000,France,0.7,0.3,0.5,60
-C,MiG29,Fulcrum,Russia,0.8,0.3,0.5,70
-C,F14,Tomcat,USA,0.7,0.4,0.5,60
-F,FU,Shitbox,USA,0.1,0.1,0.1,10
+Tier,ID,Name,Origin,Price,Manuverability,Stealth Score,Electronic Warfare,Health
+S,F22,Raptor,USA,143,0.95,0.95,0.9,80
+S,F35,Lightning II,USA,177,0.8,0.90,0.95,70
+S,Su57,Felon,Russia,54,0.95,0.40,0.8,80
+S,J20,Mighty Dragon,China,110,0.75,0.80,0.85,80
+A,Rafale,Dassault Rafale,France,115,0.9,0.60,0.9,80
+A,Typhoon,Eurofighter Typhoon,Europe,124,0.9,0.60,0.8,80
+A,FA18,Hornet,USA,67,0.8,0.60,0.7,90
+A,F15,Eagle II,USA,117,0.75,0.30,0.8,90
+A,Jas 39,Gripen E,Sweden,85,0.8,0.60,0.9,70
+B,Su35,Flanker-E,Russia,45,0.9,0.60,0.7,90
+B,MiG35,Fulcrum-F,Russia,49,0.85,0.60,0.5,80
+B,F16,Fighting Falcon,USA,63,0.8,0.40,0.6,70
+C,Su27,Flanker,Russia,41,0.9,0.40,0.5,80
+C,Mirage,Mirage 2000,France,31,0.7,0.60,0.5,60
+C,MiG29,Fulcrum,Russia,24,0.8,0.40,0.5,70
+C,F14,Tomcat,USA,64,0.7,0.30,0.5,60
