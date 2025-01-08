@@ -1,5 +1,5 @@
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-# Jamie Henson
+# Jamie Henson and Gabriel Scott
 # Run simulations logic of the flight combat senario
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -67,13 +67,15 @@ def BVR(TeamA, TeamB):
             print("Team B engages!")
             TeamA, detected_TeamA, detected_TeamB = engagement(TeamB, TeamA, detected_TeamB, detected_TeamA, 'B', 'A')
             
-        
         elif random.randint(0, 1) == 1: # Random between 0 and 1 to determine which team engages first
             
             # Team A engages Team B and Team B attempts to evade
             print("\nTeam A engages!")
             TeamB, detected_TeamB, detected_TeamA = engagement(TeamA, TeamB, detected_TeamA, detected_TeamB, 'A', 'B')
             
+            if len(TeamB) == 0: # Team B cannot return fire
+                break
+
             # Team B returns fire and Team A attempts to evade
             print("\nTeam B returns fire!")
             TeamA, detected_TeamA, detected_TeamB = engagement(TeamB, TeamA, detected_TeamB, detected_TeamA, 'B', 'A')
@@ -83,6 +85,9 @@ def BVR(TeamA, TeamB):
             # Team B engages Team A and Team A attempts to evade
             TeamA, detected_TeamA, detected_TeamB = engagement(TeamB, TeamA, detected_TeamB, detected_TeamA, 'B', 'A')
             
+            if len(TeamA) == 0: # Team A cannot return fire
+                break
+
             # Team A returns fire and Team B attempts to evade
             print("\nTeam A returns fire!")
             TeamB, detected_TeamB, detected_TeamA = engagement(TeamA, TeamB, detected_TeamA, detected_TeamB, 'A', 'B')
@@ -187,10 +192,6 @@ def engagement(Team_shooter, Team_target, detected_shooter, detected_target, tea
     
     # Iterate through each aircraft target that was detected under the radar
     for target in detected_target:
-        
-        # Remove previous target from the team if necessary (It needs to be like this because we are iterating through the list itself)
-        if previous_target != None:
-            detected_target.remove(previous_target)
 
         # Choose a random shooter from the shooting team to take down the target
         shooter = random.choice(Team_shooter)
@@ -206,16 +207,16 @@ def engagement(Team_shooter, Team_target, detected_shooter, detected_target, tea
         # Determine if the target aircraft evades the missile
         Team_target, evaded = evade(shooter, teamNameShooter, target, Team_target, teamNameTarget,'LongRangeMissile')
         
-        if evaded == False: # Target was destroyed, move to next target
-            previous_target = target
-            continue
+        if evaded == False: # Target was destroyed, remove from the detected target list.
+            detected_target.remove(target)
+            continue 
             
     return Team_target, detected_target, detected_shooter
 
 def strike(strikers, targets, strikersName, targetName):
     # Pick a random target in the opposing team
     target = random.choice(targets)
-    print(f"/n Team {strikersName} performs a strike on {target.name}")
+    print(f"Team {strikersName} performs a strike on {target.name}")
     
     # Each aircraft shoots the target
     for striker in strikers:
