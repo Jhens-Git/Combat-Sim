@@ -7,28 +7,32 @@ import csv
 
 class Aircraft:
     # Store aircraft attributes
-    def __init__(self, name, maneuverability, stealth, EW, health):
+    def __init__(self, ID, name, price, maneuverability, stealth, EW, health):
+        self.ID = ID
         self.name = name
+        self.price = price
         self.maneuverability = maneuverability
         self.stealth = stealth
         self.EW = EW
         self.health = health
     
     def __repr__(self):
-        return (f"Aircraft(name = {self.name}, maneuverability = {self.maneuverability}, stealth = {self.stealth}, EW = {self.EW}, health = {self.health})")
+        return (f"Aircraft(ID = {self.ID}, name = {self.name}, price = {self.price}, maneuverability = {self.maneuverability}, stealth = {self.stealth}, EW = {self.EW}, health = {self.health})")
 
 def loadData():
     # Initialize the team_specs dictionary
     Aircraft_dict = {}
     
     # Read the csv file and store aircrafts data in a dictionary for easy lookup
-    with open('SpecSheet.csv', mode = 'r') as file:
+    with open('Spec_Sheet.csv', mode = 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
             row = {key.strip(): value.strip() for key, value in row.items()} # Strip spaces from column names and values
-            name = row['Name']
-            Aircraft_dict[name] = Aircraft(
-                name = name,
+            ID = row['ID']
+            Aircraft_dict[ID] = Aircraft(
+                ID = ID,
+                name = str(row['Name']),
+                price = int(row['Price']),
                 maneuverability = float(row['Maneuverability']),
                 stealth = float(row['Stealth']),
                 EW = float(row['Electronic Warfare']),
@@ -37,25 +41,25 @@ def loadData():
     
     return Aircraft_dict
 
-def getSpecs(names):
+def getSpecs(IDs):
     # Initialize team array and aircraft dictionary
     team = []
     Aircraft_dict = loadData()
     
-    for name in names:
-        if name in Aircraft_dict:
-            team.append(Aircraft_dict[name])
+    for ID in IDs:
+        if ID in Aircraft_dict:
+            team.append(Aircraft_dict[ID])
         else:
-            print(f"Warning: {name} not found in specifications sheet!")
+            print(f"Warning: {ID} not found in specifications sheet!")
     return team
 
 def displayAircraft():
     # Open the spec table of available aircraft
-    with open('SpecSheet.csv', mode = 'r') as file:
+    with open('Spec_Sheet.csv', mode = 'r') as file:
         csv_reader = csv.reader(file)
         header = next(csv_reader)
-        # Print the 1st three columns of available aircraft
-        print(f"{header[0]:<10} {header[1]:<10} {header[2]:<20}")
-        print("-" * 40)
+        # Print the 1st five columns of available aircraft
+        print(f"{header[0]:<10} {header[1]:<10} {header[2]:<20} {header[3]:<10} {header[4]:<1} (million USD)")
+        print("-" * 60)
         for row in csv_reader:
-            print(f"{row[0]:<10} {row[1]:<10} {row[2]:<20}")
+            print(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} {row[3]:<10} {row[4]:<20}")
