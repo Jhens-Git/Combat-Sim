@@ -7,9 +7,10 @@ import csv
 
 def selectTeam(teamName):
     
-    # Initialize the team size, team array, and team cash
+    # Initialize the team size, team IDs array, team names array, and team cash
     teamSize = 0
-    team = []
+    teamIDs = []
+    teamNames = []
     teamCash = 0
 
     # Ask how much cash the team will have (maximum of $1 billion)
@@ -19,7 +20,7 @@ def selectTeam(teamName):
     while True:
     
         # Prompt user to select aircraft for the senario
-        aircraft_id, aircraft_cost, min_price = select_aircraft(teamName, teamCash)
+        aircraft_id, aircraft_name, aircraft_cost, min_price = select_aircraft(teamName, teamCash)
         
         # Prompt user to select quantity of aircrafts
         aircraft_qty = select_qty(teamName, teamSize, aircraft_id, teamCash, aircraft_cost)
@@ -27,19 +28,27 @@ def selectTeam(teamName):
         teamSize += aircraft_qty
         
         # Confirm the aircrafts added to the team and remaining cash balance
-        print(f"{aircraft_qty} x {aircraft_id} added to team {teamName}.")
+        print(f"{aircraft_qty} x {aircraft_id} {aircraft_name} added to team {teamName}.")
         print(f"Team {teamName} has ${teamCash} million left.")
         
-        # Add the aircraft to the team array
-        for i in range(aircraft_qty):
-            team.append(aircraft_id)
+        # Append the aircraft with their ID to the team IDs arrays
+        for i in range(1, aircraft_qty + 1):
+            teamIDs.append(f"{aircraft_id}")
             
+        # Append the aircraft with their names and quantity number
+        if aircraft_qty == 1:
+            teamNames.append(f"{aircraft_name}")
+        else:
+            for i in range(1, aircraft_qty + 1):
+                teamNames.append(f"{aircraft_name} {i}")
+        
         while True:
             # Check if the team size reaches 10
             if teamSize == 10:
                 print(f"Team {teamName} has reached their aircraft limit.")
                 break
 
+            # Check if 
             if teamCash < min_price:
                 print(f"It is not possible for team {teamName} purchase any more aircraft.")
                 break
@@ -59,7 +68,7 @@ def selectTeam(teamName):
             continue
         
     # Return the team array
-    return team
+    return teamIDs, teamNames
 
 def select_cash(teamName):
 
@@ -67,7 +76,8 @@ def select_cash(teamName):
         # Prompt user to enter a cash amount
         cash = input(f"Enter amount of cash for team {teamName} (million USD): ")
         cash_number = cash.isnumeric() # Checks if user inputted only numeric input
-             
+            
+        # Check if input is valid
         if cash_number == 0:
             print("\nInvalid input. Please enter only numbers!\n")
         elif int(cash) > 1000:
@@ -75,32 +85,33 @@ def select_cash(teamName):
         else:
             break
 
+    # Round cash value to the nearest million
     cash = int(cash)
             
     return cash
     
 def select_aircraft(teamName, teamCash):
 
-    with open(r'C:\Users\admir\OneDrive\VS Code\General\air_combat_sim\SpecSheet.csv') as file:
-            csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip header
-            valid_ids = [row[1] for row in csv_reader]
+    # Open the csv file and get the id, name, and price of the aircraft
+    with open('SpecSheet.csv', mode='r') as file:
+        csv_reader = list(csv.reader(file))
+        header = csv_reader[0]  # Save header if needed
+        rows = csv_reader[1:]   # Skip header
 
-    with open(r'C:\Users\admir\OneDrive\VS Code\General\air_combat_sim\SpecSheet.csv') as file:
-        csv_reader = csv.reader(file)
-        next(csv_reader)  # Skip header
-        prices = [row[4] for row in csv_reader]
+        # Populate the arrays for ids, aircraft names, and their prices
+        valid_ids = [row[1] for row in rows]
+        names = [row[2] for row in rows]
+        prices = [row[4] for row in rows]
 
+    # Find the aircraft with the lowest price available
     for i in range(len(prices)):
         prices[i] = int(prices[i])
-
     min_price = min(prices)
 
     while True:
         # Prompt user to pick an aircraft
         aircraft_id = input(f"\nEnter an aircraft ID for team {teamName} (Example 'F22'): ")
         
-        # Validate the aircraft ID
         # If the aircraft ID is not in the list of valid IDs, prompt the user to enter the ID again
         if aircraft_id not in valid_ids:
                 print("Invalid aircraft ID. Please try again.")
@@ -108,13 +119,14 @@ def select_aircraft(teamName, teamCash):
             # Extract the cost of the aircraft
             for i in range(len(valid_ids)):
                 if aircraft_id == valid_ids[i]:
+                    aircraft_name = names[i]
                     aircraft_cost = prices[i]
             if teamCash - aircraft_cost < 0:
                 print(f"Aircraft cost exceeds team {teamName}'s remaining cash. Please select a cheaper aircraft.")
             else:
                 break
 
-    return aircraft_id, aircraft_cost, min_price
+    return aircraft_id, aircraft_name, aircraft_cost, min_price
 
 def select_qty(teamName, teamSize, aircraft_id, teamCash, aircraft_cost):
     
