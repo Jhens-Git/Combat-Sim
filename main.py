@@ -22,22 +22,20 @@ def main():
         utils.explain()
     
     # Prompt the user to select the teams for the senario in an array
-    # print("\nTeam A\n")
-    # TeamA_list = selectTeam('A')
-    TeamA_list = ['F22', 'F35', 'FA18', 'FA18', 'FA18', 'FA18']
-    TeamB_list = ['Su57', 'J20', "Su35", 'Su35', 'Su27', 'Su27']
-    # print("\nTeam B\n")
-    # TeamB_list = selectTeam('B')
-    
+    # TeamA_IDs, TeamA_names = selectTeam('Jamie')
+    # TeamB_IDs, TeamB_names = selectTeam('Gabriel')
+    TeamA_IDs = ['F22', 'F35', 'FA18', 'FA18', 'FA18', 'FA18']
+    TeamB_IDs = ['Su57', 'J20', "Su35", 'Su35', 'Su27', 'Su27']
+    TeamA_names = ['Raptor', 'Lightning II', 'Hornet 1', 'Hornet 2', 'Hornet 3', 'Hornet 4']
+    TeamB_names = ['Felon', 'Mighty Dragon', "Flanker-E 1", 'Flanker-E 2', 'Flanker 1', 'Flanker 2']
     
     # Display the teams selected without their commas and brackets
-    print("\nTeam A:", ", ".join(TeamA_list))
-    print("\nTeam B:", ", ".join(TeamB_list))
+    print("\nTeam A:", ", ".join(TeamA_names))
+    print("\nTeam B:", ", ".join(TeamB_names))
     
     # Get the specs of the aircrafts in both teams
-    TeamA = getSpecs(TeamA_list)
-    TeamB = getSpecs(TeamB_list)
-    print(f"\n {TeamA}")
+    TeamA = getSpecs(TeamA_IDs, TeamA_names)
+    TeamB = getSpecs(TeamB_IDs, TeamB_names)
     
     # Prompt the user to run the simulation
     result = run(TeamA, TeamB)
