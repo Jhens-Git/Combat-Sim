@@ -4,9 +4,9 @@
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 import csv
+import time
 
 def selectTeam(teamName):
-    
     # Initialize the team size, team IDs array, team names array, and team cash
     teamSize = 0
     teamIDs = []
@@ -30,35 +30,55 @@ def selectTeam(teamName):
         # Confirm the aircrafts added to the team and remaining cash balance
         print(f"{aircraft_qty} x {aircraft_id} {aircraft_name} added to team {teamName}.")
         print(f"Team {teamName} has ${teamCash} million left.")
-        
-        # Append the aircraft with their ID to the team IDs arrays
-        for i in range(1, aircraft_qty + 1):
-            teamIDs.append(f"{aircraft_id}")
+        time.sleep(1) # Pause for 1 second
             
-        # Append the aircraft with their names and quantity number
-        if aircraft_qty == 1:
-            teamNames.append(f"{aircraft_name}")
-        else:
-            for i in range(1, aircraft_qty + 1):
-                teamNames.append(f"{aircraft_name} {i}")
+        # Check if the user chose an aircraft already in the team
+        prev_qty = 0
+        already_in = False
+        for ID in teamIDs:
+            if aircraft_id == ID:
+                prev_qty += 1 # Count the number of that aircraft type already in the team
+                already_in = True
+        aircraft_qty += prev_qty
         
+        if already_in == False: # Append the aircraft with their names and quantity number
+            if aircraft_qty == 1:
+                teamIDs.append(f"{aircraft_id}")
+                teamNames.append(f"{aircraft_name}")
+            else:
+                for i in range(1, aircraft_qty + 1):
+                    teamIDs.append(f"{aircraft_id}")
+                    teamNames.append(f"{aircraft_name} {i}")
+                    
+        elif already_in == True: # Append more of that same type of aircraft
+            for i in range(prev_qty, aircraft_qty):
+                teamIDs.append(f"{aircraft_id}")
+                teamNames.append(f"{aircraft_name} {i}")
+                
+        else:
+            print("Something went wrong in qty append @ selectTeam()")
+        
+        # Continue to either add for aircrafts or not
         while True:
             # Check if the team size reaches 10
             if teamSize == 10:
                 print(f"Team {teamName} has reached their aircraft limit.")
+                time.sleep(1) # Pause for 1 second
                 break
 
-            # Check if 
+            # Check if team has reach their price limit
             if teamCash < min_price:
                 print(f"It is not possible for team {teamName} purchase any more aircraft.")
+                time.sleep(1) # Pause for 1 second
                 break
             
             # Ask user if they want more aircrafts
             add = input("Do you want to add more aircrafts to the team? (yes/no): ").lower()
-            if add == "no" or add == "yes": 
+            if add == "no" or add == "yes":
                 break
             else:
                 print("Invalid input. Please enter 'yes' or 'no'.")
+                time.sleep(1) # Pause for 1 second
                 continue
         
         # If the team size reaches 10 or they finished building the team, break the loop
@@ -71,19 +91,21 @@ def selectTeam(teamName):
     return teamIDs, teamNames
 
 def select_cash(teamName):
-
     while True:
         # Prompt user to enter a cash amount
-        cash = input(f"Enter amount of cash for team {teamName} (million USD): ")
+        cash = input(f"\nEnter amount of cash for team {teamName} (million USD): ")
         cash_number = cash.isnumeric() # Checks if user inputted only numeric input
             
         # Check if input is valid
         if cash_number == 0:
             print("\nInvalid input. Please enter only numbers!\n")
         elif int(cash) > 1000:
-            print("\nInvalid input. Please enter a value less than or equal to 1 billion (1000).\n")
+            print("\nToo much. Please enter a value between 100 million (100) and 1 billion (1000).\n")
+        elif int(cash) < 100:
+            print("\nToo little. Please enter a value between 100 million (100) and 1 billion (1000).\n")
         else:
             break
+        time.sleep(1) # Pause for 1 second
 
     # Round cash value to the nearest million
     cash = int(cash)
@@ -91,7 +113,6 @@ def select_cash(teamName):
     return cash
     
 def select_aircraft(teamName, teamCash):
-
     # Open the csv file and get the id, name, and price of the aircraft
     with open('SpecSheet.csv', mode='r') as file:
         csv_reader = list(csv.reader(file))
@@ -113,8 +134,9 @@ def select_aircraft(teamName, teamCash):
         aircraft_id = input(f"\nEnter an aircraft ID for team {teamName} (Example 'F22'): ")
         
         # If the aircraft ID is not in the list of valid IDs, prompt the user to enter the ID again
-        if aircraft_id not in valid_ids:
+        if aircraft_id not in valid_ids or aircraft_id.strip() == "":
                 print("Invalid aircraft ID. Please try again.")
+                time.sleep(1) # Pause for 1 second
         else:
             # Extract the cost of the aircraft
             for i in range(len(valid_ids)):
@@ -123,6 +145,7 @@ def select_aircraft(teamName, teamCash):
                     aircraft_cost = prices[i]
             if teamCash - aircraft_cost < 0:
                 print(f"Aircraft cost exceeds team {teamName}'s remaining cash. Please select a cheaper aircraft.")
+                time.sleep(1) # Pause for 1 second
             else:
                 break
 
@@ -147,5 +170,6 @@ def select_qty(teamName, teamSize, aircraft_id, teamCash, aircraft_cost):
                 print(f"Purchasing this quantity of the {aircraft_id} exceeds team {teamName}'s cash. Please lower the quantity purchased.")
             else:
                 break
+        time.sleep(1) # Pause for 1 second
     
     return aircraft_qty
