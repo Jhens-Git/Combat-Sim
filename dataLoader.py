@@ -67,6 +67,6 @@ def displayAircraft():
         header = next(csv_reader)
         # Print the 1st five columns of available aircraft
         print(f"{header[0]:<10} {header[1]:<10} {header[2]:<20} {header[3]:<10} {header[4]:<1} (million USD)")
-        print("-" * 70)
+        print("-" * 75)
         for row in csv_reader:
-            print(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} {row[3]:<10} {row[4]:<20}")
+            print(f"{row[0]:<10} {row[1]:<10} {row[2]:<20} {row[3]:<10} {row[4]:<25}")
