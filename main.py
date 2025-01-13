@@ -1,5 +1,5 @@
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-# Jamie Henson
+# Jamie Henson and Gabriel Scott
 # Main python file for the CombatSim project
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -7,9 +7,15 @@ from aircraft import selectTeam
 from simulation import runSimulation
 from data_loader import getSpecs, displayAircraft
 import utils
+import time
+
+# TrueColor ANSI escape codes
+BLUE = '\033[38;2;0;0;255m'
+RED = '\033[38;2;255;0;0m'
+BOLD = '\033[1m'
+RESET = '\033[0m'
 
 def main():
-    
     # If the user just started the program, greet them
     print("\nWelcome to the CombatSim program!")
     familiar = utils.greet_user()
@@ -22,16 +28,12 @@ def main():
         utils.explain()
     
     # Prompt the user to select the teams for the senario in an array
-    # TeamA_IDs, TeamA_names = selectTeam('Jamie')
-    # TeamB_IDs, TeamB_names = selectTeam('Gabriel')
-    TeamA_IDs = ['F22', 'F35', 'FA18', 'FA18', 'FA18', 'FA18']
-    TeamB_IDs = ['Su57', 'J20', "Su35", 'Su35', 'Su27', 'Su27']
-    TeamA_names = ['Raptor', 'Lightning II', 'Hornet 1', 'Hornet 2', 'Hornet 3', 'Hornet 4']
-    TeamB_names = ['Felon', 'Mighty Dragon', "Flanker-E 1", 'Flanker-E 2', 'Flanker 1', 'Flanker 2']
+    TeamA_IDs, TeamA_names = selectTeam(f'{RED}A{RESET}')
+    TeamB_IDs, TeamB_names = selectTeam(f'{BLUE}B{RESET}')
     
     # Display the teams selected without their commas and brackets
-    print("\nTeam A:", ", ".join(TeamA_names))
-    print("\nTeam B:", ", ".join(TeamB_names))
+    print(f"\n{RED}Team A{RESET}:", ", ".join(TeamA_names))
+    print(f"\n{BLUE}Team B{RESET}:", ", ".join(TeamB_names))
     
     # Get the specs of the aircrafts in both teams
     TeamA = getSpecs(TeamA_IDs, TeamA_names)
@@ -53,13 +55,16 @@ def run(TeamA, TeamB):
         # Validate the input and reprompt if they put in wrong input
         if run == 'yes':
             result = runSimulation(TeamA, TeamB)
+            time.sleep(1) # Pause for 1 second
             break
         elif run == 'no':
             print("\nSimulation canceled.")
+            time.sleep(1) # Pause for 1 second
             result = False
             break
         else:
             print("\nInvalid input. Please enter 'yes' or 'no'.")
+            time.sleep(1) # Pause for 1 second
             continue
     
     return result
@@ -68,9 +73,11 @@ def restart():
     # Prompt the user to restart the program
     if input("\nDo you want to restart the program? (yes/no): ").lower() == "yes":
         print("Restarting the program...")
+        time.sleep(1) # Pause for 1 second
         main()
     else:
-        print("\nThank you for using the CombatSim program. Goodbye!")
+        print("\nThank you for using the CombatSim program. Goodbye!\n")
+        time.sleep(1) # Pause for 1 second
         exit()
 
 if __name__ == "__main__":
