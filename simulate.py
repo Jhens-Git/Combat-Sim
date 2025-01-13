@@ -4,6 +4,13 @@
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 import random
+import time
+
+# TrueColor ANSI escape codes
+BLUE = '\033[38;2;0;0;255m'
+RED = '\033[38;2;255;0;0m'
+BOLD = '\033[1m'
+RESET = '\033[0m'
 
 def runSimulation(TeamA, TeamB):
     # Run Beyond Visual Range (BVR)
@@ -38,15 +45,17 @@ def BVR(TeamA, TeamB):
         undetected_TeamB.append(aircraft)
     
     # Run BVR (Beyond Visual Range) until combat distance is within 10 nautical miles
-    print("The BVR (Beyond Visual Range) phase begins!")
+    print("\nThe BVR (Beyond Visual Range) phase begins!")
+    time.sleep(1) # Pause for 1 second
     
     while distance >= 10:
         # Print the events that occur at the given combat range of BVR
-        print(f"\nAt a range of {distance} nautical miles:")
+        print(f"\n{BOLD}At a range of {distance} nautical miles:{RESET}")
+        time.sleep(1) # Pause for 1 second
         
         # Detect aircrafts in each team given combat distance
         detected_TeamA  = detection(TeamA, detected_TeamA, distance, 'A')
-        print("--------------------------------")
+        print("<------==================------>")
         detected_TeamB = detection(TeamB, detected_TeamB, distance, 'B')
         
         # Check if either team has a target
@@ -54,34 +63,34 @@ def BVR(TeamA, TeamB):
             print("\nNo targets detected on either team!")
             
         elif len(detected_TeamA) == 0: # Team B has no targets
-            print("\nTeam B has no targets")
-            print("Team A engages!")
+            print(f"\n{BLUE}Team B{RESET} has no targets")
+            print(f"{RED}Team A{RESET} engages!")
             TeamB, detected_TeamB, detected_TeamA = engagement(TeamA, TeamB, detected_TeamA, detected_TeamB, 'A', 'B')
             
         elif len(detected_TeamB) == 0: # Team A has no targets
-            print("\nTeam A has no targets")
-            print("Team B engages!")
+            print(f"\n{RED}Team A{RESET} has no targets")
+            print(f"{BLUE}Team B{RESET} engages!")
             TeamA, detected_TeamA, detected_TeamB = engagement(TeamB, TeamA, detected_TeamB, detected_TeamA, 'B', 'A')
-            
+        
         elif random.randint(0, 1) == 1: # Random between 0 and 1 to determine which team engages first
             
             # Team A engages Team B and Team B attempts to evade
-            print("\nTeam A engages!")
+            print(f"\n{RED}Team A{RESET} engages!")
             TeamB, detected_TeamB, detected_TeamA = engagement(TeamA, TeamB, detected_TeamA, detected_TeamB, 'A', 'B')
             if len(TeamB) == 0: # Team B cannot return fire
                 break
             # Team B returns fire and Team A attempts to evade
-            print("\nTeam B returns fire!")
+            print(f"\n{BLUE}Team B{RESET} returns fire!")
             TeamA, detected_TeamA, detected_TeamB = engagement(TeamB, TeamA, detected_TeamB, detected_TeamA, 'B', 'A')
-            
+        
         else:
-            print("\nTeam B engages!")
+            print(f"\n{BLUE}Team B engages!{RESET}")
             # Team B engages Team A and Team A attempts to evade
             TeamA, detected_TeamA, detected_TeamB = engagement(TeamB, TeamA, detected_TeamB, detected_TeamA, 'B', 'A')
             if len(TeamA) == 0: # Team A cannot return fire
                 break
             # Team A returns fire and Team B attempts to evade
-            print("\nTeam A returns fire!")
+            print(f"\n{RED}Team A returns fire!{RESET}")
             TeamB, detected_TeamB, detected_TeamA = engagement(TeamA, TeamB, detected_TeamA, detected_TeamB, 'A', 'B')
             
         # Check if any teams are eliminated by checking health values
@@ -93,18 +102,18 @@ def BVR(TeamA, TeamB):
             print("Tie!")
             break
         elif len(remaining_TeamA) == 0:
-            print("Team B wins!")
+            print(f"{BLUE}Team B wins!{RESET}")
             break
         elif len(remaining_TeamB) == 0:
-            print("Team A wins!")
+            print(f"{RED}Team A wins!{RESET}")
             break
         else:
             distance -= 20 # Update distance value
             continue
         
     # Print the events at transition from BVR to WVR
-    print(f"\nRemaining aircraft in Team A: {', '.join(remaining_TeamA)}")
-    print(f"\nRemaining aircraft in Team B: {', '.join(remaining_TeamB)}")
+    print(f"\nRemaining aircraft in {RED}Team A{RESET}: {', '.join(remaining_TeamA)}")
+    print(f"\nRemaining aircraft in {BLUE}Team B{RESET}: {', '.join(remaining_TeamB)}")
     
     # Return the remaining aircrafts in each team
     return TeamA, TeamB
@@ -118,7 +127,7 @@ def WVR(TeamA, TeamB):
         
         # If both team have one aircraft remaining, switch to dog fight only
         if len(TeamA) == 1 and len(TeamB) == 1:
-            print("One aircraft remaining in each team, they engage each other in a final dogfight!")
+            print("\nOne aircraft remaining in each team, they engage each other in a final dogfight!")
             TeamA, TeamB = dogFight(TeamA, TeamB)
             
         else:
@@ -143,27 +152,27 @@ def WVR(TeamA, TeamB):
                         TeamB, TeamA = dogFight(TeamB, TeamA)
             
     # Check which team is eliminated and their remaining aircrafts in the winning team
+    time.sleep(1) # Pause for 1 second
     if len(TeamA) == 0 and len(TeamB) == 0:
-        print("Tie!")
+        print("\nTie!")
         return True
     elif len(TeamA) == 0:
-        print("Team B wins!")
+        print(f"\n{BLUE}Team B wins!{RESET}")
         return [aircraft.ID for aircraft in TeamB]
     elif len(TeamB) == 0:
-        print("Team A wins!")
+        print(f"\n{RED}Team A wins!{RESET}")
         return [aircraft.ID for aircraft in TeamA]
     else:
-        print("Error: Simulation failed to determine winner!")
+        print("\nError: Simulation failed to determine winner!")
         return False
 
 def detection(Team, detected, distance, teamName):
-    
     # Iterate through each aircraft in the team
     for aircraft in Team:
+        time.sleep(0.2) # Pause for 0.2 second
         
         if aircraft.name in detected: # Aircraft already detected, skip detection logic
             print(f"The {aircraft.name} ({teamName}) still detected!")
-            continue
         
         else: 
             # Generate a random detection threshold with margin of randomness
@@ -179,45 +188,69 @@ def detection(Team, detected, distance, teamName):
     return detected
 
 def engagement(Team_shooter, Team_target, detected_shooter, detected_target, teamNameShooter, teamNameTarget):  
+    # Initialized array of destroyed aircrafts
+    destroyed = []
+    
     # Iterate through each aircraft target that was detected under the radar
     for target in detected_target:
+        time.sleep(1) # Pause for 1 second
 
         # Choose a random shooter from the shooting team to take down the target
         shooter = (random.choice(Team_shooter)).name
 
-        # Check if the aircraft is currently undetected
+        # Check if the aircraft is currently detected, if so, then it is at revealed state
+        revealed = False
         for detected in detected_shooter:
-            print(f"The shooters are: {detected_shooter}")
-            print(f"Shooter is {shooter}")
-            print(f"Detected is {detected}")
             if detected == shooter:
-                print(f"The {shooter} ({teamNameShooter}) targets the {target} ({teamNameTarget})!")
+                revealed = True
+                break
+            elif detected != shooter:
+                revealed = False
+        
+        # If aircraft is currently undetected, run odds of it being detected when firing
+        if revealed == True:  
+            print(f"The {shooter} ({teamNameShooter}) targets the {target} ({teamNameTarget})!")
+        elif revealed == False:
+            # Get the shooter stealth value
+            for aircraft in Team_shooter:
+                if aircraft.name == shooter:
+                    stealth = aircraft.stealth
+            # Determine if shooter is revealed by firing and engaging in target (Gen 4 nearly always reveals itself)
+            reveal_threshold = random.uniform(0.5, 1)
+            if reveal_threshold > stealth:
+                detected_shooter.append(shooter)
+                print(f"The {shooter} ({teamNameShooter}) targets the {target} ({teamNameTarget}), but it reveals its position by firing!")
             else:
-                # Get the shooter stealth value
-                for aircraft in Team_shooter:
-                    if aircraft.name == shooter:
-                        stealth = aircraft.stealth
-                # Determine if shooter is revealed by firing and engaging in target (Gen 4 nearly always reveals itself)
-                reveal_threshold = random.uniform(0.5, 1)
-                if reveal_threshold > stealth:
-                    detected_shooter.append(shooter)
-                    print(f"The {shooter} ({teamNameShooter}) targets the {target} ({teamNameTarget}), but it reveals its position by firing!")
-                else:
-                    print(f"The {shooter} ({teamNameShooter}) targets the {target} ({teamNameTarget}) and remains undetected!")
+                print(f"The {shooter} ({teamNameShooter}) targets the {target} ({teamNameTarget}) and remains undetected!")
+        elif revealed == 'no targets':
+            continue # No targets to hit
+        else:
+            print("Something went wrong in detection()")
             
         # Determine if the target aircraft evades the missile
         Team_target, evaded = evade(shooter, teamNameShooter, target, Team_target, teamNameTarget, 'LongRangeMissile')
+        
+        # Remove target from detected targets list
+        if evaded == False:
+            destroyed.append(target)
+            
+    # Remove destroyed aircrafts from detected targets list
+    for target in destroyed:
+        if target in detected_target:
+            detected_target.remove(target)
             
     return Team_target, detected_target, detected_shooter
 
 def strike(strikers, targets, strikersName, targetName):
+    time.sleep(1) # Pause for 1 second
+    
     # Pick a random target in the opposing team
     target = (random.choice(targets)).name
-    print(f"Team {strikersName} performs a strike on {target}")
+    print(f"{BOLD}Team {strikersName} performs a strike on {target}{RESET}")
     
     # Each aircraft shoots the target
-    for striker in strikers:
-        targets, evaded = evade(striker, strikersName, target, targets, targetName, 'ShortRangeMissile')
+    for striker in strikers: 
+        targets, evaded = evade(striker.name, strikersName, target, targets, targetName, 'ShortRangeMissile') # Note that striker.name was necessary for evade() to work
         
         # Stop shooting if target is already destroyed
         if evaded == False:
@@ -226,12 +259,13 @@ def strike(strikers, targets, strikersName, targetName):
     return targets
 
 def dogFight(Team1, Team2):
+    time.sleep(1) # Pause for 1 second
     
     # Pick a random aircrafts from both teams in a dogfight until annihilation
     aircraft1 = (random.choice(Team1)).name
     aircraft2 = (random.choice(Team2)).name
     
-    print(f"\n{aircraft1} and {aircraft2} engage in a head-to-head dogfight!")
+    print(f"\n{BOLD}{aircraft1} and {aircraft2} engage in a head-to-head dogfight!{RESET}")
     
     # Keep fighting until one aircraft is eliminated
     dogfight = True
@@ -248,21 +282,24 @@ def dogFight(Team1, Team2):
         Team2, evaded = evade(aircraft1, 'A', aircraft2, Team2, 'B', attackType)
         
         # End dogfight if aircraft is destroyed
-        if evaded == 'False':
+        if evaded == False:
+            time.sleep(1) # Pause for 1 second
             print(f"The {aircraft1} stands victorious over the {aircraft2} in a dogfight!")
-            dogfight = False
+            break
         
         # Aircraft 2 returns fire and Aircraft 1 evades 
         Team1, evaded = evade(aircraft2, 'B', aircraft1, Team1, 'A', attackType)
         
         # End dogfight if aircraft is destroyed
-        if evaded == 'False':
+        if evaded == False:
+            time.sleep(1) # Pause for 1 second
             print(f"The {aircraft2} stands victorious over the {aircraft1} in a dogfight!")
-            dogfight = False
+            break
     
     return Team1, Team2
 
 def evade(shooter, teamNameShooter, target, Team_target, teamNameTarget, attackType):
+    time.sleep(1) # Pause for 1 second
     
     # Get the target's manuverability and electronic warfare value from the team dictionary
     for aircraft in Team_target:
@@ -293,7 +330,7 @@ def evade(shooter, teamNameShooter, target, Team_target, teamNameTarget, attackT
         # Calculate the evasion chance based on maneuverability and electronic warfare values
         if evasion_threshold > (0.75 * maneuverability + 0.25 * Ew): 
             for aircraft in Team_target:
-                if aircraft.name == target.name:
+                if aircraft.name == target:
                     aircraft.health = 0 # Target eliminated
                     print(f"The {target} ({teamNameTarget}) was destroyed by {shooter} ({teamNameShooter}) via missile!")
                     evaded = False
@@ -329,8 +366,9 @@ def evade(shooter, teamNameShooter, target, Team_target, teamNameTarget, attackT
         print("Error: Invalid attack type!")
         return 'error'
     
+    # Remove target from the team
     if evaded == False:
-        Team_target.remove(aircraft) # Remove target from the team
-    
+        Team_target.remove(aircraft)
+        
     # Return the updated team
     return Team_target, evaded
